@@ -2,14 +2,16 @@
 
 import socket
 
-def scanner_port(ip, port):
+def scanner_port(ip, port, delai=0.5):
+    """
+    Teste si un port est ouvert sur une IP donnée
+    Retourne True si ouvert, False sinon
+    """
     try:
-        # Crée une connexion
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.settimeout(0.5)  # Attend 0.5 seconde max
+        s.settimeout(delai)
         resultat = s.connect_ex((ip, port))
         s.close()
-        # 0 = connexion réussie = port ouvert
         return resultat == 0
     except:
         return False
