@@ -1,12 +1,17 @@
-# 🔍 Scanner de Ports TCP
+# 🔍 Scanner de Ports - Édition Réseau Local
 
 ## Description
-Scanner de ports simple en Python avec :
-- Validation des entrées utilisateur
-- Association ports ↔ services standards
-- Redemande automatique en cas d'erreur
-- Vérification que l'IP est dans le réseau local
+Scanner de ports TCP intelligent qui **fonctionne uniquement sur le réseau local**.
 
-## Utilisation
+## Fonctionnalités exclusives
+- ✅ **Détection automatique** de votre réseau local
+- ✅ **Filtrage** : scan uniquement des IP de votre réseau
+- ✅ **Barre de progression** dynamique
+- ✅ **Association** ports ↔ services standards
+- ✅ **Interface utilisateur** claire et professionnelle
+
+## Installation
+
 ```bash
-python main.py
+git clone https://github.com/votre-pseudo/port-scanner-project.git
+cd port-scanner-project
