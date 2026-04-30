@@ -121,20 +121,29 @@ def main():
     
     ports_ouverts = []
     
-    for index, port in enumerate(range(debut, fin + 1), 1):
-        # Affiche la progression
-        progression = afficher_barre_progression(index, total_ports)
-        print(f"   {progression} | Test port {port}...", end=" ")
+   # === SECTION DE SCAN AMÉLIORÉE ===
+    print("\n" + "═" * 60)
+    print(" SCAN MULTI-THREADÉ EN COURS...")
+    print("═" * 60 + "\n")
+    
+    ports_ouverts = []
+    ports_a_scanner = range(debut, fin + 1)
+    
+    # On utilise un ThreadPoolExecutor pour lancer les tests en parallèle
+    with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
+        # On crée un dictionnaire pour suivre quel futur correspond à quel port
+        futures = {executor.submit(scanner_port, ip, port): port for port in ports_a_scanner}
         
-        if scanner_port(ip, port):
-            service = nom_service(port)
-            print(f"OUVERT → {service}")
-            ports_ouverts.append(port)
-        else:
-            print(" Fermé")
-        
-        # Petit délai pour ne pas surcharger le réseau
-        time.sleep(0.05)
+        for i, future in enumerate(concurrent.futures.as_completed(futures), 1):
+            port = futures[future]
+            # Mise à jour de la barre de progression
+            progression = afficher_barre_progression(i, total_ports)
+            print(f"\r   {progression} | Scan du port {port}...", end="")
+            
+            if future.result(): # Si scanner_port a retourné True
+                service = nom_service(port)
+                print(f"\n   [+] PORT {port} OUVERT → {service}")
+                ports_ouverts.append(port)
     
     # === RÉSULTATS FINAUX ===
     print("\n" + "═" * 60)
