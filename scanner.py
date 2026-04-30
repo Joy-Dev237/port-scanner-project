@@ -1,23 +1,16 @@
-# scanner.py - Test des ports TCP
-# Ce fichier contient la logique de connexion réseau
-
+# scanner.py - Logique de connexion optimisée
 import socket
-import time
+import threading
 
-def scanner_port(ip, port, delai=0.3):
+def scanner_port(ip, port, delai=0.5):
     """
-    Teste si un port est ouvert sur une IP donnée
-    Retourne True si ouvert, False sinon
+    Teste la connexion sur un port spécifique
+    Timeout réduit pour plus de rapidité
     """
     try:
-        # Crée un socket (prise réseau)
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # Définit un délai d'attente (timeout)
-        s.settimeout(delai)
-        # Tente la connexion (connect_ex retourne 0 si réussi)
-        resultat = s.connect_ex((ip, port))
-        # Ferme la connexion
-        s.close()
-        return resultat == 0
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(delai)
+            resultat = s.connect_ex((ip, port))
+            return resultat == 0
     except:
         return False
